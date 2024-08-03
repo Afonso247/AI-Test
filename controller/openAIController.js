@@ -4,37 +4,21 @@ import openai from "../config/config.js";
 const gerarResposta = async (req, res) => {
 
     try {
-        const { titulo } = req.body;
+        // const { titulo } = req.body;
 
         const desc = await openai.chat.completions.create({
             model: "gpt-4o-mini",
             messages: [
                 {
                     "role": "user", 
-                    "content": `Entregue-me uma sinopse de até 500 caracteres para um filme chamado ${titulo}`
-                },
-            ],
-            max_tokens: 500
-        });
-
-        if (desc.choices[0].message.type === 'insufficient_quota') {
-            throw new Error('Insufficient quota. Please try again later.');
-        }
-
-        const tags = await openai.chat.completions.create({
-            model: "gpt-4o-mini",
-            messages: [
-                {
-                    "role": "user", 
-                    "content": `Entregue-me 10 palavras-chave para um filme chamado ${titulo}`
+                    "content": `Gere para mim um nickname criativo para um jogo online. (Insira somente o nickname)`
                 },
             ],
             max_tokens: 100
         });
 
         res.status(200).json({
-            descricao: desc.choices[0].message.content,
-            tags: tags.choices[0].message.content
+            descricao: desc.choices[0].message.content
         });
 
     } catch (error) {
