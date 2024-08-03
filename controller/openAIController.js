@@ -1,9 +1,11 @@
 import openai from "../config/config.js";
 
 // gera uma resposta do gpt-4 em forma de "chat completion"
-const gerarResposta = async (titulo) => {
+const gerarResposta = async (req, res) => {
 
     try {
+        const { titulo } = req.body;
+
         const desc = await openai.chat.completions.create({
             model: "gpt-4o-mini",
             messages: [
@@ -19,8 +21,6 @@ const gerarResposta = async (titulo) => {
             throw new Error('Insufficient quota. Please try again later.');
         }
 
-        console.log(desc.choices[0].message.content);
-
         const tags = await openai.chat.completions.create({
             model: "gpt-4o-mini",
             messages: [
@@ -32,7 +32,11 @@ const gerarResposta = async (titulo) => {
             max_tokens: 100
         });
 
-        console.log(tags.choices[0].message.content);
+        res.status(200).json({
+            descricao: desc.choices[0].message.content,
+            tags: tags.choices[0].message.content
+        });
+
     } catch (error) {
         if (error.response && error.response.status === 429) {
             throw new Error('Requisições excedidas. Por favor, tente novamente mais tarde.');
@@ -43,19 +47,22 @@ const gerarResposta = async (titulo) => {
 }
 
 // gera uma resposta do dall-e-3 em forma de geração de imagem
-const gerarImagem = async (desc) => {
+const gerarImagem = async (req, res) => {
 
     try {
 
         const image = await openai.images.generate({
             model: "dall-e-3",
-            prompt: desc,
+            prompt: req.body.prompt,
             n: 1,
             size: "1024x1024",
             quality: "standard"
         });
 
-        console.log(image.data[0].url);
+        res.status(200).json({
+            url: image.data[0].url
+        });
+
     } catch (err) {
         console.error(err);
     }
