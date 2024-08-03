@@ -1,5 +1,5 @@
 import readline from 'readline';
-import gerarResposta from './controller/openAIController.js';
+import { gerarResposta, gerarImagem } from './controller/openAIController.js';
 
 const leitura = readline.createInterface({
     input: process.stdin,
@@ -7,3 +7,4 @@ const leitura = readline.createInterface({
 })
 
 leitura.question('Insira um título de filme: \n', gerarResposta);
+// leitura.question('Descreva uma imagem: \n', gerarImagem);
