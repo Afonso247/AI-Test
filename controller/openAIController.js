@@ -1,5 +1,6 @@
 import openai from "../config/config.js";
 
+// gera uma resposta do gpt-4 em forma de "chat completion"
 const gerarResposta = async (titulo) => {
 
     try {
@@ -41,6 +42,7 @@ const gerarResposta = async (titulo) => {
 
 }
 
+// gera uma resposta do dall-e-3 em forma de geração de imagem
 const gerarImagem = async (desc) => {
 
     try {
